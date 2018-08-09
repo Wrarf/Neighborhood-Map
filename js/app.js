@@ -9,21 +9,14 @@ var locations = [
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
 
-// TODO arrow function version
-document.getElementById("x-icon").addEventListener("click", async function() {
-    locationsList = document.getElementById("locations-list");
-    locationsList.style.animationName = "hideLocations";
-    await sleep(1000);
-    locationsList.style.display = "none";
-});
-
 showLocations = function() {
     locationsList =  document.getElementById("locations-list");
     locationsList.style.animationName = "showLocations";
     locationsList.style.display = "block";
 }
 
-const hideLocations = locationsList => async function() {
+const hideLocations = async function() {
+    locationsList = document.getElementById("locations-list");
     locationsList.style.animationName = "hideLocations";
     await sleep(1000);
     locationsList.style.display = "none";
@@ -37,6 +30,7 @@ showWikipedia = function(text) {
 };
 
 const hideWikipedia = wikiText => async function() {
+    locationsList = document.getElementById("locations-list");
     wikiText.style.animationName = "goUp";
     await sleep(1000);
     wikiText.style.display = "none";
