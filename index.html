@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="styles/styles.css">
+		<title>Neighborhood Map</title>
+	</head>
+
+	<body>
+		<header><div id="hamburger-icon" data-bind="click: showLocations">☰</div></header>
+
+		<div id="wikipedia-text" data-bind="click: hideWikipedia($element)"></div>
+
+		<nav id="locations-list">
+			<div id="x-icon" data-bind="click: hideLocations">✖</div>
+			<div id="filter">
+				<input id="filter-text" type="text" placeholder="Filter by">
+				<input id="filter-button" type="button" value="Filter">
+			</div>
+		</nav>
+
+		<main id="map"></main>
+
+		<script src="js/libs/knockout-3.4.2.js"></script>
+		<script src="js/libs/jquery-3.3.1.min.js"></script>
+		<script src="js/app.js"></script>	
+	</body>
+</html>
