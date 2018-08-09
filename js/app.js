@@ -1,6 +1,5 @@
 var map;
 var markers = [];
-var wikiText;
 var locations = [
     {title: "Sagrada Família", coords: {lat: 41.404427, lng: 2.174302}},
     {title: "Park Güell", coords: {lat: 41.414446, lng: 2.152665}},
