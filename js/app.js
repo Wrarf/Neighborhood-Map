@@ -1,12 +1,7 @@
 var map;
 var markers = [];
-var locations = [
-    {title: "Sagrada Família", coords: {lat: 41.404427, lng: 2.174302}},
-    {title: "Park Güell", coords: {lat: 41.414446, lng: 2.152665}},
-    {title: "Arc de Triomf", coords: {lat: 41.391085, lng: 2.180634}},
-    {title: "Vila de Gràcia", coords: {lat: 41.400240, lng: 2.157652}},
-    {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
-];
+
+/* ------- ANIMATIONS' HANDLERS ------- */
 
 showLocations = function() {
     locationsList =  document.getElementById("locations-list");
@@ -35,7 +30,25 @@ const hideWikipedia = wikiText => async function() {
     wikiText.style.display = "none";
 };
 
+/* ------- VIEW MODEL ------- */
+
 var ViewModel = function() {
+    locations = ko.observableArray([
+        {title: "Sagrada Família", coords: {lat: 41.404427, lng: 2.174302}},
+        {title: "Park Güell", coords: {lat: 41.414446, lng: 2.152665}},
+        {title: "Arc de Triomf", coords: {lat: 41.391085, lng: 2.180634}},
+        {title: "Vila de Gràcia", coords: {lat: 41.400240, lng: 2.157652}},
+        {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
+    ]);
+
+    filterText = ko.observable();
+
+    filteredLocations = ko.observableArray();
+
+    for(var i = 0; i < locations().length; i++) {
+        filteredLocations.push({title: locations()[i].title});
+    }
+
     // Create the map centered in Barcelona.
     initMap = function() {
         map = new google.maps.Map(document.getElementById("map"), {
@@ -50,12 +63,12 @@ var ViewModel = function() {
     // Add markers to the map based on "locations" array.
     addMarkers = function() {
         var title;
-        for(var i = 0; i < locations.length; i++) {
+        for(var i = 0; i < locations().length; i++) {
             markers.push(
                 new google.maps.Marker({
-                    position: locations[i].coords,
+                    position: locations()[i].coords,
                     map: map,
-                    title: locations[i].title
+                    title: locations()[i].title
                 })
             );
 
@@ -71,7 +84,7 @@ var ViewModel = function() {
                 })
                 .done(function(response) {
                     pages = response.query.pages;
-                    // The next key is the id of the page but we don"t have it, so we find it with this for.
+                    // The next key is the id of the page but we don't have it, so we find it with this for.
                     var id;
                     for (key in pages)
                         id = key;
@@ -84,6 +97,7 @@ var ViewModel = function() {
         }
     };
 
+    // This function is used to hide the elements before their animations are finished.
     sleep = async function(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
@@ -93,6 +107,28 @@ var ViewModel = function() {
     .fail(function() {
         alert("Error loading Google Maps API");
     });
+
+    findLocation = function() {
+        var formattedFilterText = filterText().toLowerCase();
+        var formattedLocation;
+
+        filteredLocations.removeAll();
+
+        for(var i = 0; i < locations().length; i++) {
+            formattedLocation = locations()[i].title.toLowerCase();
+            if(formattedLocation.search(formattedFilterText) == -1) {
+                markers[i].setMap(null);
+            }
+            else {
+                filteredLocations.push({title: locations()[i].title});
+                markers[i].setMap(map);
+            }
+        }
+    };
 }
 
 ko.applyBindings(ViewModel);
+
+ko.onError = function(error) {
+    alert("Knockout error: " + error);
+}

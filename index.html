@@ -15,15 +15,17 @@
 		<nav id="locations-list">
 			<div id="x-icon" data-bind="click: hideLocations">✖</div>
 			<div id="filter">
-				<input id="filter-text" type="text" placeholder="Filter by">
-				<input id="filter-button" type="button" value="Filter">
+				<input id="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText, event: {input: findLocation}">
 			</div>
+			<ul data-bind="foreach: filteredLocations">
+				<li data-bind="text: title"></li>
+			</ul>
 		</nav>
 
 		<main id="map"></main>
 
 		<script src="js/libs/knockout-3.4.2.js"></script>
 		<script src="js/libs/jquery-3.3.1.min.js"></script>
-		<script src="js/app.js"></script>	
+		<script src="js/app.js"></script>
 	</body>
 </html>

@@ -91,3 +91,14 @@ header {
 	overflow-y: auto;
 	animation-duration: 1s;
 }
+
+ul {
+	height: 80%;
+	padding: 5%;
+}
+
+li {
+	height: 20%;
+	width: 100%;
+	list-style-type: none;
+}
