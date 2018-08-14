@@ -24,7 +24,7 @@
 				<input id="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText, event: {input: findLocation}">
 			</div>
 			<ul data-bind="foreach: filteredLocations">
-				<li data-bind="text: title"></li>
+				<li data-bind="text: title, click: selectMarker.bind($data)"></li>
 			</ul>
 		</nav>
 

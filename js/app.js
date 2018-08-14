@@ -8,13 +8,14 @@ var locations = [
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
 
- /* ------- ANIMATIONS' HANDLERS ------- */
+
+ /* ------- ANIMATIONS ------- */
 
 showLocations = function() {
     locationsList =  document.getElementById("locations-list");
     locationsList.style.animationName = "showLocations";
     locationsList.style.display = "block";
-    setLocationListStatus();
+    setLocationListStatus(true);
 };
 
 const hideLocations = async function() {
@@ -22,7 +23,7 @@ const hideLocations = async function() {
     locationsList.style.animationName = "hideLocations";
     await sleep(1000);
     locationsList.style.display = "none";
-    setLocationListStatus();
+    setLocationListStatus(false);
 };
 
 showWikipedia = function(text) {
@@ -38,6 +39,7 @@ const hideWikipedia = wikiText => async function() {
     await sleep(1000);
     wikiText.style.display = "none";
 };
+
 
 /* ------- VIEW MODEL ------- */
 
@@ -76,7 +78,6 @@ var ViewModel = function() {
 
     // Add markers to the map based on "locations" array.
     addMarkers = function() {
-        var title;
         for(var i = 0; i < locations.length; i++) {
             markers.push(
                 new google.maps.Marker({
@@ -96,6 +97,7 @@ var ViewModel = function() {
         }
     };
 
+    // Adds an info window to the marker.
     showInfoWindow = function(marker) {
         infoWindow.marker = marker;
         var content = document.createElement("div");
@@ -104,6 +106,7 @@ var ViewModel = function() {
         showMore = content.appendChild(document.createElement("p"));
         showMore.innerHTML = "Show More";
         infoWindow.setContent(content);
+        // Clicking "Show More" shows informations from Wikipedia.
         google.maps.event.addDomListener(showMore,'click', function(){
             callWikipedia(marker.title);
         });
@@ -156,12 +159,19 @@ var ViewModel = function() {
         }
     };
 
-    setLocationListStatus = function() {
-        if(locationsListOpened()) {
-            locationsListOpened(false);
-        } 
-        else {
-            locationsListOpened(true);
+    setLocationListStatus = function(stautus) {
+        locationsListOpened(status);
+    }
+
+    // Handles the click event on an element from the list.
+    selectMarker = function(data) {
+        hideLocations();
+        title = data.title;
+        for(var i = 0; i < markers.length; i++) {
+            if(markers[i].title == title) {
+                // Simulates a click to the marker.
+                google.maps.event.trigger(markers[i], 'click');
+            }
         }
     }
 };
