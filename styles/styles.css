@@ -105,7 +105,6 @@ li {
 
 @media screen and (min-width: 900px) {
 	#locations-list {
-		display: block;
 		width: 20%;
 	}
 }
