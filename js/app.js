@@ -7,6 +7,7 @@ var locations = [
     {title: "Vila de Gràcia", coords: {lat: 41.400240, lng: 2.157652}},
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
+var $window = $(window);
 
 /* ------- ANIMATIONS ------- */
 
@@ -54,6 +55,12 @@ var ViewModel = function() {
     locationsListOpened = ko.observable(false);
 
     var infoWindow;
+
+    // Keeps track of the dimension of the window to make the site responsive.
+    windowWidth = ko.observable($window.width());
+    $window.resize(function () {
+        windowWidth($window.width());
+    });
 
     // Try to asynchronously load Google Maps API.
     $.getScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAzCclQVYZ2-KhSm_9PvWYbprYp2szXH_Q&v=3&callback=initMap")
@@ -164,7 +171,9 @@ var ViewModel = function() {
 
     // Handles the click event on an element from the list.
     selectMarker = function(data) {
-        hideLocations();
+        if(windowWidth() < 570) {
+            hideLocations();
+        }
         title = data.title;
         for(var i = 0; i < markers.length; i++) {
             if(markers[i].title == title) {
