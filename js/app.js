@@ -1,17 +1,18 @@
-var map;
-var markers = [];
-var locations = [
+let map;
+let markers = [];
+let locations = [
     {title: "Sagrada Família", coords: {lat: 41.404427, lng: 2.174302}},
     {title: "Park Güell", coords: {lat: 41.414446, lng: 2.152665}},
     {title: "Arc de Triomf", coords: {lat: 41.391085, lng: 2.180634}},
     {title: "Vila de Gràcia", coords: {lat: 41.400240, lng: 2.157652}},
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
-var $window = $(window);
+let $window = $(window);
+
 
 /* ------- ANIMATIONS ------- */
 
-showLocations = function() {
+const showLocations = function() {
     locationsList =  document.getElementById("locations-list");
     locationsList.style.animationName = "showLocations";
     locationsList.style.display = "block";
@@ -26,7 +27,7 @@ const hideLocations = async function() {
     setLocationListStatus(false);
 };
 
-showWikipedia = function(text) {
+const showWikipedia = function(text) {
     wikiText = document.getElementById("wikipedia-text");
     wikiText.style.animationName = "goDown";
     wikiText.innerHTML = text;
@@ -46,20 +47,21 @@ const hideWikipedia2 = async function(wikiText) {
     wikiText.style.display = "none";
 };
 
+
 /* ------- VIEW MODEL ------- */
 
-var ViewModel = function() {
+const ViewModel = function() {
     filterText = ko.observable();
 
     filteredLocations = ko.observableArray();
 
-    for(var i = 0; i < locations.length; i++) {
+    for(let i = 0; i < locations.length; i++) {
         filteredLocations.push({title: locations[i].title});
     }
 
     locationsListOpened = ko.observable(false);
 
-    var infoWindow;
+    let infoWindow;
 
     // Keeps track of the dimension of the window to make the site responsive.
     windowWidth = ko.observable($window.width());
@@ -89,7 +91,7 @@ var ViewModel = function() {
 
     // Add markers to the map based on "locations" array.
     addMarkers = function() {
-        for(var i = 0; i < locations.length; i++) {
+        for(let i = 0; i < locations.length; i++) {
             markers.push(
                 new google.maps.Marker({
                     position: locations[i].coords,
@@ -111,8 +113,8 @@ var ViewModel = function() {
     // Adds an info window to the marker.
     showInfoWindow = function(marker) {
         infoWindow.marker = marker;
-        var content = document.createElement("div");
-        var showMore;
+        let content = document.createElement("div");
+        let showMore;
         content.innerHTML = "<h2>" + marker.title + "</h2>";
         showMore = content.appendChild(document.createElement("p"));
         showMore.setAttribute("id", "wiki-link");
@@ -137,7 +139,7 @@ var ViewModel = function() {
         .done(function(response) {
             pages = response.query.pages;
             // The next key is the id of the page but we don't have it, so we find it with this for.
-            var id;
+            let id;
             for (key in pages)
                 id = key;
             showWikipedia(pages[id].extract);
@@ -154,17 +156,16 @@ var ViewModel = function() {
 
     // Filters locations based on user's input.
     findLocation = function() {
-        var formattedFilterText = filterText().toLowerCase();
-        var formattedLocation;
+        let formattedFilterText = filterText().toLowerCase();
+        let formattedLocation;
 
         filteredLocations.removeAll();
 
-        for(var i = 0; i < locations.length; i++) {
+        for(let i = 0; i < locations.length; i++) {
             formattedLocation = locations[i].title.toLowerCase();
             if(formattedLocation.search(formattedFilterText) == -1) {
                 markers[i].setMap(null); // Hide a marker.
-            }
-            else {
+            } else {
                 filteredLocations.push({title: locations[i].title});
                 markers[i].setMap(map); // Show a marker.
             }
@@ -182,7 +183,7 @@ var ViewModel = function() {
         }
         hideWikipedia2(document.getElementById("wikipedia-text"));
         title = data.title;
-        for(var i = 0; i < markers.length; i++) {
+        for(let i = 0; i < markers.length; i++) {
             if(markers[i].title == title) {
                 // Simulates a click to the marker.
                 google.maps.event.trigger(markers[i], 'click');
