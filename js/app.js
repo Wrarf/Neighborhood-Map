@@ -110,7 +110,8 @@ var ViewModel = function() {
         var showMore;
         content.innerHTML = "<h2>" + marker.title + "</h2>";
         showMore = content.appendChild(document.createElement("p"));
-        showMore.innerHTML = "Show More";
+        showMore.setAttribute("id", "wiki-link");
+        showMore.innerHTML = "SHOW MORE";
         infoWindow.setContent(content);
         // Clicking "Show More" shows informations from Wikipedia.
         google.maps.event.addDomListener(showMore,'click', function(){
