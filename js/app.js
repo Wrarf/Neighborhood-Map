@@ -9,7 +9,7 @@ var locations = [
 ];
 
 
- /* ------- ANIMATIONS ------- */
+/* ------- ANIMATIONS ------- */
 
 showLocations = function() {
     locationsList =  document.getElementById("locations-list");
@@ -159,7 +159,7 @@ var ViewModel = function() {
         }
     };
 
-    setLocationListStatus = function(stautus) {
+    setLocationListStatus = function(status) {
         locationsListOpened(status);
     }
 
@@ -180,4 +180,4 @@ ko.applyBindings(ViewModel);
 
 ko.onError = function(error) {
     alert("Knockout error: " + error);
-}
+};
