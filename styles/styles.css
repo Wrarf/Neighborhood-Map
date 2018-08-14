@@ -15,10 +15,28 @@ header {
 	padding-left: 3%;
 }
 
+.icon {
+	cursor: pointer;
+}
+
 #map {
 	top: 5%;
 	width: 100%;
 	height: 95%;
+}
+
+.animated {
+	display: none;
+	position: absolute;
+	top: 5%;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	background-color: lightblue;
+	text-align: center;
+	color: white;
+	overflow-y: auto;
+	animation-duration: 1s;
 }
 
 @keyframes showLocations {
@@ -43,19 +61,6 @@ header {
 	}
 }
 
-#locations-list {
-	display: none;
-	position: absolute;
-	top: 5%;
-	z-index: 1;
-	background-color: lightblue;
-	color: white;
-	overflow-y: auto;
-	width: 100%;
-	height: 100%;
-	animation-duration: 1s; 
-}
-
 @keyframes goDown {
     from {
     	height: 0;
@@ -74,20 +79,6 @@ header {
 	}
 }
 
-#wikipedia-text {
-	display: none;
-	position: absolute;
-	top: 5%;
-	z-index: 1;
-	width: 100%;
-	height: 100%;
-	background-color: lightblue;
-	text-align: center;
-	color: white;
-	overflow-y: auto;
-	animation-duration: 1s;
-}
-
 ul {
 	height: 80%;
 	padding: 5%;
@@ -97,4 +88,24 @@ li {
 	height: 20%;
 	width: 100%;
 	list-style-type: none;
+	cursor: pointer;
+}
+
+@media screen and (min-width: 570px) {
+	#locations-list {
+		display: block;
+		width: 30%;
+	}
+
+	.icon {
+		display: none;
+	}
+}
+
+
+@media screen and (min-width: 900px) {
+	#locations-list {
+		display: block;
+		width: 20%;
+	}
 }

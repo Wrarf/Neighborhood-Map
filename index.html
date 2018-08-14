@@ -10,16 +10,16 @@
 	<body>
 		<header>
 			<!-- ko ifnot: locationsListOpened -->
-				<div id="hamburger-icon" data-bind="click: showLocations">☰</div>
+				<div class="icon" data-bind="click: showLocations">☰</div>
 			<!-- /ko -->
 			<!-- ko if: locationsListOpened -->
-				<div id="x-icon" data-bind="click: hideLocations">✖</div>
+				<div class="icon" data-bind="click: hideLocations">✖</div>
 			<!-- /ko -->
 		</header>
 
-		<div id="wikipedia-text" data-bind="click: hideWikipedia($element)"></div>
+		<div id="wikipedia-text" class="animated" data-bind="click: hideWikipedia($element)"></div>
 
-		<nav id="locations-list">
+		<nav id="locations-list" class="animated">
 			<div id="filter">
 				<input id="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText, event: {input: findLocation}">
 			</div>

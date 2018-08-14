@@ -8,7 +8,6 @@ var locations = [
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
 
-
 /* ------- ANIMATIONS ------- */
 
 showLocations = function() {
@@ -133,7 +132,7 @@ var ViewModel = function() {
         .fail(function() {
             showWikipedia("WIKIPEDIA API ERROR");
         });
-    }
+    };
 
     // This function is used to hide the elements before their animations are finished.
     sleep = async function(ms) {
@@ -161,7 +160,7 @@ var ViewModel = function() {
 
     setLocationListStatus = function(status) {
         locationsListOpened(status);
-    }
+    };
 
     // Handles the click event on an element from the list.
     selectMarker = function(data) {
@@ -173,7 +172,7 @@ var ViewModel = function() {
                 google.maps.event.trigger(markers[i], 'click');
             }
         }
-    }
+    };
 };
 
 ko.applyBindings(ViewModel);
