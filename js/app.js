@@ -34,7 +34,6 @@ showWikipedia = function(text) {
 };
 
 const hideWikipedia = wikiText => async function() {
-    locationsList = document.getElementById("locations-list");
     wikiText.style.animationName = "goUp";
     await sleep(1000);
     wikiText.style.display = "none";
@@ -172,9 +171,12 @@ var ViewModel = function() {
 
     // Handles the click event on an element from the list.
     selectMarker = function(data) {
+        // TODO redo this if!
         if(windowWidth() < 570) {
             hideLocations();
         }
+        // TODO correct this!
+        hideWikipedia(document.getElementById("wikipedia-text"));
         title = data.title;
         for(var i = 0; i < markers.length; i++) {
             if(markers[i].title == title) {
