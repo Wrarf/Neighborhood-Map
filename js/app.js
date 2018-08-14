@@ -1,6 +1,6 @@
 var map;
 var markers = [];
-locations = [
+var locations = [
     {title: "Sagrada Família", coords: {lat: 41.404427, lng: 2.174302}},
     {title: "Park Güell", coords: {lat: 41.414446, lng: 2.152665}},
     {title: "Arc de Triomf", coords: {lat: 41.391085, lng: 2.180634}},
@@ -8,20 +8,22 @@ locations = [
     {title: "Plaça Reial", coords: {lat: 41.380207, lng: 2.175502}}
 ];
 
-/* ------- ANIMATIONS' HANDLERS ------- */
+ /* ------- ANIMATIONS' HANDLERS ------- */
 
 showLocations = function() {
     locationsList =  document.getElementById("locations-list");
     locationsList.style.animationName = "showLocations";
     locationsList.style.display = "block";
-}
+    setLocationListStatus();
+};
 
 const hideLocations = async function() {
     locationsList = document.getElementById("locations-list");
     locationsList.style.animationName = "hideLocations";
     await sleep(1000);
     locationsList.style.display = "none";
-}
+    setLocationListStatus();
+};
 
 showWikipedia = function(text) {
     wikiText = document.getElementById("wikipedia-text");
@@ -47,6 +49,19 @@ var ViewModel = function() {
     for(var i = 0; i < locations.length; i++) {
         filteredLocations.push({title: locations[i].title});
     }
+
+    locationsListOpened = ko.observable(false);
+
+    var infoWindow;
+
+    // Try to asynchronously load Google Maps API.
+    $.getScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAzCclQVYZ2-KhSm_9PvWYbprYp2szXH_Q&v=3&callback=initMap")
+    .done(function() {
+        infoWindow = new google.maps.InfoWindow();
+    })
+    .fail(function() {
+        alert("Error loading Google Maps API");
+    });
 
     // Create the map centered in Barcelona.
     initMap = function() {
@@ -76,37 +91,53 @@ var ViewModel = function() {
                 await sleep(500);
                 this.setAnimation(null);
 
-                // Get infos from Wikipedia and pass them to the view.
-                $.get({
-                    url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + this.title,
-                    dataType: "jsonp"
-                })
-                .done(function(response) {
-                    pages = response.query.pages;
-                    // The next key is the id of the page but we don't have it, so we find it with this for.
-                    var id;
-                    for (key in pages)
-                        id = key;
-                    showWikipedia(pages[id].extract);
-                })
-                .fail(function() {
-                    showWikipedia("WIKIPEDIA API ERROR");
-                });
+                showInfoWindow(this);
             });
         }
     };
+
+    showInfoWindow = function(marker) {
+        infoWindow.marker = marker;
+        var content = document.createElement("div");
+        var showMore;
+        content.innerHTML = "<h2>" + marker.title + "</h2>";
+        showMore = content.appendChild(document.createElement("p"));
+        showMore.innerHTML = "Show More";
+        infoWindow.setContent(content);
+        google.maps.event.addDomListener(showMore,'click', function(){
+            callWikipedia(marker.title);
+        });
+        infoWindow.open(map, marker);
+        infoWindow.addListener('closeclick', function() {
+            infoWindow.marker = null;
+        });
+    };
+
+    // Get infos from Wikipedia and pass them to the view.
+    callWikipedia = function(title) {
+        $.get({
+            url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + title,
+            dataType: "jsonp"
+        })
+        .done(function(response) {
+            pages = response.query.pages;
+            // The next key is the id of the page but we don't have it, so we find it with this for.
+            var id;
+            for (key in pages)
+                id = key;
+            showWikipedia(pages[id].extract);
+        })
+        .fail(function() {
+            showWikipedia("WIKIPEDIA API ERROR");
+        });
+    }
 
     // This function is used to hide the elements before their animations are finished.
     sleep = async function(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
 
-    // Try to asynchronously load Google Maps API.
-    $.getScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAzCclQVYZ2-KhSm_9PvWYbprYp2szXH_Q&v=3&callback=initMap")
-    .fail(function() {
-        alert("Error loading Google Maps API");
-    });
-
+    // Filters locations based on user's input.
     findLocation = function() {
         var formattedFilterText = filterText().toLowerCase();
         var formattedLocation;
@@ -116,15 +147,24 @@ var ViewModel = function() {
         for(var i = 0; i < locations.length; i++) {
             formattedLocation = locations[i].title.toLowerCase();
             if(formattedLocation.search(formattedFilterText) == -1) {
-                markers[i].setMap(null);
+                markers[i].setMap(null); // Hide a marker.
             }
             else {
                 filteredLocations.push({title: locations[i].title});
-                markers[i].setMap(map);
+                markers[i].setMap(map); // Show a marker.
             }
         }
     };
-}
+
+    setLocationListStatus = function() {
+        if(locationsListOpened()) {
+            locationsListOpened(false);
+        } 
+        else {
+            locationsListOpened(true);
+        }
+    }
+};
 
 ko.applyBindings(ViewModel);
 

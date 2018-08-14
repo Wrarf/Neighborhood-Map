@@ -56,10 +56,6 @@ header {
 	animation-duration: 1s; 
 }
 
-#x-icon {
-	float: right;
-}
-
 @keyframes goDown {
     from {
     	height: 0;
@@ -101,4 +97,8 @@ li {
 	height: 20%;
 	width: 100%;
 	list-style-type: none;
+}
+
+.info-window {
+	text-align: center;
 }

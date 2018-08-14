@@ -8,12 +8,18 @@
 	</head>
 
 	<body>
-		<header><div id="hamburger-icon" data-bind="click: showLocations">☰</div></header>
+		<header>
+			<!-- ko ifnot: locationsListOpened -->
+			<div id="hamburger-icon" data-bind="click: showLocations">☰</div>
+			<!-- /ko -->
+			<!-- ko if: locationsListOpened -->
+			<div id="x-icon" data-bind="click: hideLocations">✖</div>
+			<!-- /ko -->
+		</header>
 
 		<div id="wikipedia-text" data-bind="click: hideWikipedia($element)"></div>
 
 		<nav id="locations-list">
-			<div id="x-icon" data-bind="click: hideLocations">✖</div>
 			<div id="filter">
 				<input id="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText, event: {input: findLocation}">
 			</div>
