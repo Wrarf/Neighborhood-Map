@@ -10,28 +10,30 @@
 	<body>
 		<header>
 			<!-- ko ifnot: locationsListOpened -->
-				<div class="icon" data-bind="click: showLocations">☰</div>
+				<div class="icon" data-bind="click: function() { setLocationListStatus(true) }">☰</div>
 			<!-- /ko -->
 			<!-- ko if: locationsListOpened -->
-				<div class="icon" data-bind="click: hideLocations">✖</div>
+				<div class="icon" data-bind="click: function() { setLocationListStatus(false) }">✖</div>
 			<!-- /ko -->
 		</header>
 
-		<div id="wikipedia-text" class="animated" data-bind="click: hideWikipedia($element)"></div>
-
-		<nav id="locations-list" class="animated">
-			<div id="filter">
-				<input id="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText, event: {input: findLocation}">
+		<nav class="animated locations-list" data-bind="css: listClass">
+			<div class="filter">
+				<input class="filter-text" type="text" placeholder="Filter by" data-bind="textInput: filterText">
 			</div>
-			<ul data-bind="foreach: filteredLocations">
-				<li data-bind="text: title, click: selectMarker.bind($data)"></li>
+			<ul data-bind="foreach: filteredLocations, click: function() { setLocationListStatus(false) }">
+				<li data-bind="text: title, click: $parent.selectMarker"></li>
 			</ul>
 		</nav>
 
-		<main id="map"></main>
+		<main class="map"></main>
 
 		<script src="js/libs/knockout-3.4.2.js"></script>
 		<script src="js/libs/jquery-3.3.1.min.js"></script>
-		<script src="js/app.js"></script>
+		<script src="js/model.js"></script>
+		<script src="js/viewmodel.js"></script>
+		<script async defer src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAzCclQVYZ2-KhSm_9PvWYbprYp2szXH_Q&v=3&callback=initMap"
+			onerror="googleAPIError()">
+		</script>
 	</body>
 </html>
